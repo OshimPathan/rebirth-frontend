@@ -10,7 +10,7 @@ class AuthService {
   static const String _tokenKey = 'auth_token';
   static const String _userKey = 'user_data';
   static const String _baseUrl =
-      'https://rebirth-backend.vercel.app/api'; // Update with your backend URL
+      'https://rebirth-backend-zeta.vercel.app/api'; // Update with your backend URL
 
   String? _token;
   Map<String, dynamic>? _user;
