@@ -1,11 +1,11 @@
 # 🌟 Rebirth: An Emotion-Aware AI Companion for Mental Health Support
 
 <p align="center">
-  <img src="rebirth/assets/images/logo.png" alt="Rebirth Logo" width="150"/>
+  <img src="assets/images/butterfly.png" alt="Rebirth Logo" width="150"/>
 </p>
 
 <p align="center">
-  <strong>A Novel Hybrid Approach Combining BERT-Based Emotion Detection with Large Language Models for Personalized Mental Health Conversations</strong>
+  <strong>A Novel Multi-Stage Decision Pipeline with BERT-Based Emotion Detection and Controlled LLM Generation for Personalized Mental Health Conversations</strong>
 </p>
 
 <p align="center">
