@@ -6,6 +6,8 @@ import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'dart:io';
 import 'package:rebirth_draft_2/pages/auth/login_screen.dart';
+import 'package:rebirth_draft_2/pages/Analytics/analytics_screen.dart';
+import 'package:rebirth_draft_2/pages/Settings/settings_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -149,19 +151,31 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final colors = ThemeColors.of(context);
     return Scaffold(
-      backgroundColor: AppColors.backgroundColor,
+      backgroundColor: colors.backgroundColor,
       appBar: AppBar(
-        backgroundColor: AppColors.backgroundColor,
-        foregroundColor: AppColors.textColor,
+        backgroundColor: colors.backgroundColor,
+        foregroundColor: colors.textColor,
         elevation: 0,
         title: Text(
           'Profile',
           style: TextStyle(
-            color: AppColors.textColor,
+            color: colors.textColor,
             fontWeight: FontWeight.w600,
           ),
         ),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.settings, color: colors.textColor),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const SettingsScreen()),
+              );
+            },
+          ),
+        ],
       ),
       body:
           _loading
@@ -270,7 +284,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       (_user?['email'] ?? 'user@example.com')
                                           .toString(),
                                       style: TextStyle(
-                                        color: AppColors.textColor.withValues(
+                                        color: colors.textColor.withValues(
                                           alpha: 0.7,
                                         ),
                                       ),
@@ -280,12 +294,66 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               ),
                             ],
                           ),
+                          const SizedBox(height: 20),
+
+                          // Quick Actions
+                          Row(
+                            children: [
+                              Expanded(
+                                child: _buildQuickAction(
+                                  colors,
+                                  Icons.analytics_outlined,
+                                  'Analytics',
+                                  () => Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder:
+                                          (context) => const AnalyticsScreen(),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(width: 12),
+                              Expanded(
+                                child: _buildQuickAction(
+                                  colors,
+                                  Icons.flag_outlined,
+                                  'Goals',
+                                  () {
+                                    // Scroll to goals section
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(
+                                        content: Text(
+                                          'See Goals section below',
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                ),
+                              ),
+                              const SizedBox(width: 12),
+                              Expanded(
+                                child: _buildQuickAction(
+                                  colors,
+                                  Icons.settings_outlined,
+                                  'Settings',
+                                  () => Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder:
+                                          (context) => const SettingsScreen(),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
                           const SizedBox(height: 24),
 
                           Text(
                             'Basic Info',
                             style: TextStyle(
-                              color: AppColors.textColor,
+                              color: colors.textColor,
                               fontSize: 16,
                               fontWeight: FontWeight.w600,
                             ),
@@ -305,7 +373,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           Text(
                             'Onboarding',
                             style: TextStyle(
-                              color: AppColors.textColor,
+                              color: colors.textColor,
                               fontSize: 16,
                               fontWeight: FontWeight.w600,
                             ),
@@ -677,6 +745,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   Widget _infoRow(String label, String value) {
+    final colors = ThemeColors.of(context);
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8),
       child: Row(
@@ -685,15 +754,52 @@ class _ProfileScreenState extends State<ProfileScreen> {
             width: 100,
             child: Text(
               label,
-              style: TextStyle(
-                color: AppColors.textColor.withValues(alpha: 0.7),
-              ),
+              style: TextStyle(color: colors.textColor.withValues(alpha: 0.7)),
             ),
           ),
           Expanded(
-            child: Text(value, style: TextStyle(color: AppColors.textColor)),
+            child: Text(value, style: TextStyle(color: colors.textColor)),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildQuickAction(
+    ThemeColors colors,
+    IconData icon,
+    String label,
+    VoidCallback onTap,
+  ) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 16),
+        decoration: BoxDecoration(
+          color: colors.surfaceColor,
+          borderRadius: BorderRadius.circular(12),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.05),
+              blurRadius: 8,
+              offset: const Offset(0, 2),
+            ),
+          ],
+        ),
+        child: Column(
+          children: [
+            Icon(icon, color: colors.accentColor, size: 28),
+            const SizedBox(height: 8),
+            Text(
+              label,
+              style: TextStyle(
+                color: colors.textColor,
+                fontSize: 12,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

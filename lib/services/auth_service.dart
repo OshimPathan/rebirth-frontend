@@ -9,8 +9,7 @@ class AuthService {
 
   static const String _tokenKey = 'auth_token';
   static const String _userKey = 'user_data';
-  static const String _baseUrl =
-      'https://rebirth-backend-zeta.vercel.app/api'; // Update with your backend URL
+  static const String _baseUrl = 'https://rebirth-backend-zeta.vercel.app/api';
 
   String? _token;
   Map<String, dynamic>? _user;
@@ -152,7 +151,10 @@ class AuthService {
   }
 
   // Update profile (name or profile picture URL)
-  Future<Map<String, dynamic>> updateProfile({String? name, String? profilePicture}) async {
+  Future<Map<String, dynamic>> updateProfile({
+    String? name,
+    String? profilePicture,
+  }) async {
     try {
       if (_token == null) {
         return {'success': false, 'message': 'No token available'};
@@ -181,7 +183,10 @@ class AuthService {
         return {'success': true, 'user': updatedUser};
       } else {
         final errorData = jsonDecode(response.body);
-        return {'success': false, 'message': errorData['message'] ?? 'Profile update failed'};
+        return {
+          'success': false,
+          'message': errorData['message'] ?? 'Profile update failed',
+        };
       }
     } catch (e) {
       return {'success': false, 'message': 'Network error: $e'};
@@ -191,9 +196,10 @@ class AuthService {
   // Goals APIs
   Future<List<dynamic>> getGoals() async {
     if (_token == null) return [];
-    final resp = await http.get(Uri.parse('$_baseUrl/auth/goals'), headers: {
-      'Authorization': 'Bearer $_token',
-    });
+    final resp = await http.get(
+      Uri.parse('$_baseUrl/auth/goals'),
+      headers: {'Authorization': 'Bearer $_token'},
+    );
     if (resp.statusCode == 200) {
       final data = jsonDecode(resp.body);
       return (data['goals'] as List?) ?? [];
@@ -201,11 +207,18 @@ class AuthService {
     return [];
   }
 
-  Future<Map<String, dynamic>?> createGoal({required String title, required String category, DateTime? targetDate}) async {
+  Future<Map<String, dynamic>?> createGoal({
+    required String title,
+    required String category,
+    DateTime? targetDate,
+  }) async {
     if (_token == null) return null;
     final resp = await http.post(
       Uri.parse('$_baseUrl/auth/goals'),
-      headers: {'Authorization': 'Bearer $_token', 'Content-Type': 'application/json'},
+      headers: {
+        'Authorization': 'Bearer $_token',
+        'Content-Type': 'application/json',
+      },
       body: jsonEncode({
         'title': title,
         'category': category,
@@ -219,11 +232,17 @@ class AuthService {
     return null;
   }
 
-  Future<Map<String, dynamic>?> updateGoal(String goalId, Map<String, dynamic> updates) async {
+  Future<Map<String, dynamic>?> updateGoal(
+    String goalId,
+    Map<String, dynamic> updates,
+  ) async {
     if (_token == null) return null;
     final resp = await http.patch(
       Uri.parse('$_baseUrl/auth/goals/$goalId'),
-      headers: {'Authorization': 'Bearer $_token', 'Content-Type': 'application/json'},
+      headers: {
+        'Authorization': 'Bearer $_token',
+        'Content-Type': 'application/json',
+      },
       body: jsonEncode(updates),
     );
     if (resp.statusCode == 200) {
